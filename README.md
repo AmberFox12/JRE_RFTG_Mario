@@ -1,0 +1,195 @@
+# BTS SIO RFTG 2025-2026 - Projet Mario
+
+Projet Laravel de démonstration utilisant l'API Toad pour l'authentification et la gestion de films.
+
+## Prérequis
+
+- PHP >= 8.2
+- Composer
+- Node.js >= 20 (version recommandée : 22.21.0)
+- npm
+- **API Toad** : Le backend doit être déployé et accessible
+  - Dépôt de l'API : https://github.com/RFTG-2025-2026/BTS_SIO_RFTG-2025-2026_BackEnd
+
+## Installation
+
+### 1. Cloner le projet
+
+```bash
+git clone https://github.com/RFTG-2025-2026/BTS_SIO_RFTG-2025-2026_Mario.git
+cd BTS_SIO_RFTG-2025-2026_Mario/mario-mch
+```
+
+### 2. Installer les dépendances PHP
+
+```bash
+composer install
+```
+
+### 3. Installer les dépendances JavaScript
+
+```bash
+npm install
+```
+
+### 4. Configuration de l'environnement
+
+Copier le fichier `.env.example` et le renommer en `.env` :
+
+```bash
+cp .env.example .env
+```
+
+Modifier le fichier `.env` avec vos paramètres :
+
+```env
+APP_NAME="Application Mario Demo"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=http://localhost/
+
+# Base de données SQLite (pas de BDD externe)
+DB_CONNECTION=sqlite
+
+# Sessions et cache stockés dans des fichiers (pas de BDD)
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+# Cache et queues en fichiers
+CACHE_STORE=file
+QUEUE_CONNECTION=file
+
+# Logs
+LOG_CHANNEL=stack
+LOG_LEVEL=debug
+
+# Configuration de l'API Toad (OBLIGATOIRE)
+# L'API backend doit être déployée et accessible
+TOAD_API_URL=http://localhost
+TOAD_API_PORT=8180
+TOAD_API_TOKEN=eyJhbGciOiJIUzI1NiJ9.e30.jg2m4pLbAlZv1h5uPQ6fU38X23g65eXMX8q-SXuIPDg
+
+# Configuration JWT pour l'authentification Toad
+TOAD_CLIENT_JWT_SECRET=P7vREsA2RLdQHOvUn2bAkFOSfEqiCAdG65436453645
+TOAD_CLIENT_JWT_ISS=mario-app
+TOAD_CLIENT_JWT_AUD=toad-api
+TOAD_CLIENT_JWT_TTL=3600
+```
+
+**Important** : 
+- Ce projet **n'utilise pas de base de données externe** (SQLite uniquement pour les migrations si besoin)
+- **Sessions et cache** : Stockés dans des fichiers (`storage/framework/`)
+- **L'API Toad** doit être démarrée et accessible avant de lancer ce projet
+- Le port par défaut de l'API Toad est **8180**
+- Configurez les variables `TOAD_API_*` selon votre environnement
+
+### 5. Générer la clé d'application
+
+```bash
+php artisan key:generate
+```
+
+### 6. Créer la base de données SQLite et exécuter les migrations (non nécessaire pour la version initiale de demo)
+
+Windows (PowerShell) :
+```powershell
+New-Item -ItemType File -Path database/database.sqlite -Force
+php artisan migrate
+```
+
+Linux/Mac :
+```bash
+touch database/database.sqlite
+php artisan migrate
+```
+
+## Lancer le projet en local
+
+⚠️ **Prérequis** : L'API Toad doit être démarrée (voir https://github.com/RFTG-2025-2026/BTS_SIO_RFTG-2025-2026_BackEnd)
+
+### Méthode 1 : Mode développement (recommandé)
+
+Ouvrir **deux terminaux** :
+
+**Terminal 1** - Serveur Laravel :
+```bash
+php artisan serve
+```
+
+**Terminal 2** - Compilation des assets avec rechargement automatique :
+```bash
+npm run dev
+```
+
+Le projet sera accessible à l'adresse : **http://localhost:8000**
+
+### Méthode 2 : Build de production
+
+Compiler les assets une seule fois :
+
+```bash
+npm run build
+php artisan serve
+```
+
+⚠️ Cette méthode ne permet pas le rechargement automatique lors des modifications CSS/JS.
+
+## Structure du projet
+
+```
+mario-mch/
+├── app/
+│   ├── Auth/              # Authentification personnalisée avec Toad
+│   ├── Http/Controllers/  # Contrôleurs de l'application
+│   ├── Models/            # Modèles Eloquent
+│   ├── Providers/         # Fournisseurs de services
+│   └── Services/          # Services métier (ToadAuthService, ToadFilmService)
+├── config/                # Fichiers de configuration
+├── database/              # Migrations et seeders
+├── resources/
+│   ├── views/             # Templates Blade
+│   ├── css/               # Fichiers CSS
+│   └── js/                # Fichiers JavaScript
+├── routes/
+│   └── web.php            # Routes web
+└── public/                # Fichiers publics
+```
+
+## Fonctionnalités
+
+- **Authentification** : Connexion via l'API Toad
+- **Gestion de films** : Liste et détail des films récupérés depuis l'API Toad
+- **Interface responsive** : Utilisation de Bootstrap
+
+## API Toad
+
+Ce projet utilise une API externe (Toad) pour :
+- L'authentification des utilisateurs
+- La récupération des données de films
+
+Assurez-vous que l'API Toad est accessible et configurée correctement dans le fichier `.env`.
+
+## Branches
+
+- `main` : Branche principale de production
+- `DEV` : Branche de développement
+
+## Commandes utiles
+
+```bash
+# Nettoyer le cache
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+
+# Lister les routes
+php artisan route:list
+
+# Lancer les tests
+php artisan test
+```
+
+## Auteurs
+Matthieu CHARNOZ
+BTS SIO RFTG - Promotion 2025-2026 - MTB By Creative
