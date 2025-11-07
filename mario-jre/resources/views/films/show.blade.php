@@ -34,8 +34,8 @@
                         <dt class="col-sm-3">Année de sortie</dt>
                         <dd class="col-sm-9">{{ $film['releaseYear'] ?? 'N/A' }}</dd>
 
-                        <dt class="col-sm-3">Langue</dt>
-                        <dd class="col-sm-9">ID {{ $film['languageId'] ?? 'N/A' }}</dd>
+                        <dt class="col-sm-3">Langue d'origine</dt>
+                        <dd class="col-sm-9">{{ $language }}</dd>
 
                         <dt class="col-sm-3">Durée</dt>
                         <dd class="col-sm-9">{{ $film['length'] ?? 'N/A' }} minutes</dd>
@@ -56,12 +56,16 @@
                     <hr>
 
                     <div class="d-flex gap-2">
-                        <a href="#" class="btn btn-warning">
+                        <a href="{{ route('films.edit', $film['filmId'] ?? $film['id']) }}" class="btn btn-warning">
                             <i class="bi bi-pencil"></i> Modifier
                         </a>
-                        <button class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?')">
-                            <i class="bi bi-trash"></i> Supprimer
-                        </button>
+                        <form action="{{ route('films.destroy', $film['filmId'] ?? $film['id']) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce film ?')">
+                                <i class="bi bi-trash"></i> Supprimer
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
