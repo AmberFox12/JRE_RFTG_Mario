@@ -54,12 +54,20 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                <a href="{{ route('inventory.create', ['film_id' => $filmId]) }}"
-                                                   class="btn btn-sm btn-primary"
-                                                   title="Ajouter un DVD"
-                                                   onclick="event.stopPropagation()">
-                                                    <i class="bi bi-plus-circle"></i> Ajouter DVD
-                                                </a>
+                                                <div class="d-flex gap-2">
+                                                    <a href="{{ route('inventory.show', $filmId) }}"
+                                                       class="btn btn-sm btn-info"
+                                                       title="Consulter le stock par store"
+                                                       onclick="event.stopPropagation()">
+                                                        <i class="bi bi-eye"></i> Consulter stock
+                                                    </a>
+                                                    <a href="{{ route('inventory.create', ['film_id' => $filmId]) }}"
+                                                       class="btn btn-sm btn-primary"
+                                                       title="Ajouter un DVD"
+                                                       onclick="event.stopPropagation()">
+                                                        <i class="bi bi-plus-circle"></i> Ajouter DVD
+                                                    </a>
+                                                </div>
                                             </td>
                                         </tr>
 

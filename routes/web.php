@@ -21,6 +21,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/films/create', [FilmController::class, 'create'])->name('films.create');
     Route::post('/films', [FilmController::class, 'store'])->name('films.store');
 
+    // Consultation du stock d'un film par point de distribution
+    Route::get('/inventory/film/{filmId}', [InventoryController::class, 'show'])->name('inventory.show');
+
     // Suppresion d'un film
     Route::delete('/films/{id}', [FilmController::class, 'destroy'])->name('films.destroy');
     
