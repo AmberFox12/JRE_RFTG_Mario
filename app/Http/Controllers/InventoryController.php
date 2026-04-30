@@ -252,4 +252,47 @@ class InventoryController extends Controller
 
         return redirect()->route('inventory.index')->with('error', $message);
     }
+
+    public function show($filmId)
+    {
+        //
+        $allInventoriesResult = $this->inventoryService->getAllInventory();
+        $filmByFilmIdResult = $this->filmService->getFilmById($filmId);
+
+        $inventories = [];
+        if (is_array($allInventoriesResult) && ($allInventoriesResult['success'] ?? false)) {
+            $all = $allInventoriesResult['data'] ?? [];
+            foreach ($all as $item) {
+                if (($item['filmId'] ?? null) == $filmId) {
+                    $inventories[] = $item;
+                }
+            }
+        }
+        // Grouper les film par store
+        $storeGroups = [];
+        foreach ($inventories as $inventory) {
+            $storeId = $inventory['storeId'] ?? null;
+            if ($storeId) {
+                if (!isset($storeGroups[$storeId])) {
+                    $storeGroups[$storeId] = [
+                        'film' => $inventory['film'] ?? null,
+                        'inventories' => [],
+                        'availableCount' => 0,
+                        'totalCount' => 0
+                    ];
+                }
+                $storeGroups[$storeId]['inventories'][] = $inventory;
+                $storeGroups[$storeId]['totalCount']++;
+
+                // Compter les DVD disponibles (non loués)
+                if (!isset($inventory['rentalId']) || $inventory['rentalId'] === null) {
+                    $storeGroups[$storeId]['availableCount']++;
+                }
+            }
+        }
+        return view('inventory.show', [
+            'storeGroups' => $storeGroups,
+            'film' => $filmByFilmIdResult
+        ]);
+    }
 }
