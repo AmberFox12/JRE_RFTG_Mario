@@ -6,7 +6,7 @@ use App\Http\Controllers\FilmController;
 use App\Http\Controllers\InventoryController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
 Auth::routes();
